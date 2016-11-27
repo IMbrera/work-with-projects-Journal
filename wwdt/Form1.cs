@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using wwdt.Properties;
 namespace wwdt
 {
     public partial class Form1 : Form
@@ -28,10 +28,14 @@ namespace wwdt
 
             //connect
             #region
-            conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Desktop\Диплом\wwdt\wwdt\db.mdf;Integrated Security=True");
+            conn = new SqlConnection(Settings.Default.conn);
+
+          //  conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Desktop\Диплом\wwdt\wwdt\db.mdf;Integrated Security=True");
             adap = new SqlDataAdapter();
             dataS = new DataSet();
             //    dataGridView1.DataSource = tableBindingSource;
+            //fill and work with first tab grid
+            #region
             adap.SelectCommand = new SqlCommand("select * from dbNET", conn);
 
             adap.InsertCommand = new SqlCommand("Insert into dbNET (Start, Описание, ВремяРаботы) values (@id, @dw, @sw)", conn);
@@ -50,6 +54,30 @@ namespace wwdt
             adap.DeleteCommand = new SqlCommand("delete from dbNET where Start=@id", conn);
             adap.DeleteCommand.Parameters.Add("@id", SqlDbType.Char, 20, "Start");
             adap.Fill(dataS, "dbNET");
+            dataGridView1.DataSource = dataS.Tables["dbNET"];
+            #endregion
+            //fill and work with second tab grid
+            #region
+            adap.SelectCommand = new SqlCommand("select * from Objects", conn);
+
+            adap.InsertCommand = new SqlCommand("Insert into Objects (Name_product,Definition,Value) values (@name,@def ,@value)", conn);
+
+            adap.InsertCommand.Parameters.Add("@name", SqlDbType.Char, 20, "Name_product");
+            adap.InsertCommand.Parameters.Add("@def", SqlDbType.Char, 20, "Definition");
+            adap.InsertCommand.Parameters.Add("@value", SqlDbType.Int, 10000, "Value");
+        
+
+
+            adap.UpdateCommand = new SqlCommand("update Object set Name_product=@name, Value=@value", conn);
+            adap.UpdateCommand.Parameters.Add("@name", SqlDbType.Char, 20, "Name_product");
+            adap.UpdateCommand.Parameters.Add("@def", SqlDbType.Char, 20, "Definition");
+            adap.UpdateCommand.Parameters.Add("@value", SqlDbType.Int, 10000, "Value");
+
+            adap.DeleteCommand = new SqlCommand("delete from Object where Name_product=@name", conn);
+            adap.DeleteCommand.Parameters.Add("@name", SqlDbType.Char, 20, "Name_product");
+            adap.Fill(dataS, "Objects");
+            dataGridView2.DataSource = dataS.Tables["Objects"];
+            #endregion
             /*
             try
             {
@@ -62,8 +90,9 @@ namespace wwdt
             }
             */
             // dataGridView1.DataSource = dataS.Tables[0];
-            dgv = new DataGridView { Parent = this, Dock = DockStyle.Top, DataSource = dataS.Tables["dbNET"] };
-            dataGridView1.DataSource = dataS.Tables["dbNET"];
+            // dgv = new DataGridView { Parent = this, Dock = DockStyle.Top, DataSource = dataS.Tables["dbNET"] };
+
+
             #endregion
         }
 
@@ -195,6 +224,10 @@ namespace wwdt
             adap.Update(dataS.Tables["dbNET"]);
             выход.Enabled = true;
         }
-        
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            adap.Update(dataS.Tables["Objects"]);
+        }
     }
 }

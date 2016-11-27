@@ -26,11 +26,11 @@ namespace wwdt.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\bd.mdf;Integr" +
-            "ated Security=True")]
-        public string bdConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Desktop\\Диплом\\wwdt\\wwdt\\d" +
+            "b.mdf;Integrated Security=True")]
+        public string conn {
             get {
-                return ((string)(this["bdConnectionString"]));
+                return ((string)(this["conn"]));
             }
         }
     }
